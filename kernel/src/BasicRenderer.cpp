@@ -35,6 +35,8 @@ void BasicRenderer::Print(const char *str)
     unsigned int x = 0;
     unsigned int baseCursorPosition = CursorPosition.X;
 
+    if (baseCursorPosition > 24) baseCursorPosition = 24;
+
     char *chr = (char *)str;
 
     while (*chr != 0)
