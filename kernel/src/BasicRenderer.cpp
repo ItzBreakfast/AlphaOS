@@ -1,5 +1,7 @@
 #include "BasicRenderer.h"
 
+BasicRenderer *GlobalRenderer;
+
 BasicRenderer::BasicRenderer(Framebuffer *targetFramebuffer, PSF1_FONT *psf1_Font)
 {
     TargetFramebuffer = targetFramebuffer;
@@ -34,6 +36,9 @@ void BasicRenderer::Print(const char *str)
 {
     unsigned int x = 0;
     unsigned int baseCursorPosition = CursorPosition.X;
+
+    if (baseCursorPosition > 24)
+        baseCursorPosition = 24;
 
     char *chr = (char *)str;
 

@@ -1,128 +1,126 @@
-#include <stddef.h>
+#include "kernelUtil.h"
 
-#include "BasicRenderer.h"
-#include "cstr.h"
-#include "efiMemory.h"
-
-struct BootInfo
+void PrintStatus(BasicRenderer *GlobalRenderer, bool isSuccess)
 {
-    Framebuffer *framebuffer;
-    PSF1_FONT *psf1_Font;
-    void *mMap;
-    uint64_t mMapSize;
-    uint64_t mMapDescSize;
-};
-
-void PrintLine(BasicRenderer *basicRenderer, int lines)
-{
-    for (int i = 0; i < lines; i++)
+    switch (isSuccess)
     {
-        basicRenderer->Print("==========================================================================================================================================================================================================================================");
+    case true:
+    {
+        GlobalRenderer->Colour = 0xffffffff;
+
+        GlobalRenderer->Print("[");
+
+        GlobalRenderer->Colour = 0xff00ff00;
+        GlobalRenderer->Print(" OK ");
+
+        GlobalRenderer->Colour = 0xffffffff;
+
+        GlobalRenderer->Print("] ");
+
+        break;
     }
 
-    return;
+    case false:
+    {
+        GlobalRenderer->Colour = 0xffffffff;
+
+        GlobalRenderer->Print("[");
+
+        GlobalRenderer->Colour = 0xff00ff00;
+
+        GlobalRenderer->Print(" ERROR ");
+
+        GlobalRenderer->Colour = 0xffffffff;
+
+        GlobalRenderer->Print("] ");
+
+        break;
+    }
+    }
 }
 
 extern "C" void _start(BootInfo *bootInfo)
 {
-    /* unsigned int y = 50;
-    unsigned int BPP = 4;
+    KernelInfo KernelInfo = InitializeKernel(bootInfo);
 
-    for (unsigned int x = 0; x < framebuffer->Width / 2 * BPP; x += BPP)
-    {
-        *(unsigned int *)(x + (y * framebuffer->PixelsPerScanLine * BPP) + framebuffer->BaseAddress) = 0xffffffff;
-    } */
+    PageTableManager *pageTableManager = KernelInfo.pageTableManager;
 
-    BasicRenderer newRenderer = BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y = 24;
 
-    // Basic information and Number to String conversion test
+    PrintStatus(GlobalRenderer, true);
+    GlobalRenderer->Print("All files loaded successfully");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y = 24;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    PrintLine(&newRenderer, 2);
+    PrintStatus(GlobalRenderer, true);
+    GlobalRenderer->Print("GOP located successfully");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 16;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    newRenderer.Print("!! All files loaded successfully !!");
+    PrintStatus(GlobalRenderer, true);
+    GlobalRenderer->Print("Renderer was set Successfully");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 32;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    newRenderer.Print("Welcome to Alpha OS");
+    PrintStatus(GlobalRenderer, true);
+    GlobalRenderer->Print("Page tables was set successfully");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 32;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    PrintLine(&newRenderer, 1);
+    PrintStatus(GlobalRenderer, true);
+    GlobalRenderer->Print("Kernel initialized successfully");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 16;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 32;
 
-    newRenderer.Print("!! Test Number to String conversion !!");
+    GlobalRenderer->Print("     ___       __      .______    __    __       ___           ______        _______.");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 32;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    newRenderer.Print("Result One: ");
-    newRenderer.Print(to_string((uint64_t)1234567890));
+    GlobalRenderer->Print("    /   \\     |  |     |   _  \\  |  |  |  |     /   \\         /  __  \\      /       |");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 32;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    newRenderer.Print("Result Two: ");
-    newRenderer.Print(to_string((int64_t)-1234567890));
+    GlobalRenderer->Print("   /  ^  \\    |  |     |  |_)  | |  |__|  |    /  ^  \\       |  |  |  |    |   (----`");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 32;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    newRenderer.Print("Result Three: ");
-    newRenderer.Print(to_string((double)-12345.67890, 5));
+    GlobalRenderer->Print("  /  /_\\  \\   |  |     |   ___/  |   __   |   /  /_\\  \\      |  |  |  |     \\   \\    ");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 32;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    newRenderer.Print("Result Four: 0x");
-    newRenderer.Print(to_hstring((uint64_t)0x123456789ABCDEF));
+    GlobalRenderer->Print(" /  _____  \\  |  `----.|  |      |  |  |  |  /  _____  \\     |  `--'  | .----)   |   ");
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 32;
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    PrintLine(&newRenderer, 2);
+    GlobalRenderer->Print("/__/     \\__\\ |_______|| _|      |__|  |__| /__/     \\__\\     \\______/  |_______/    ");
 
-    // Print memory map entry details
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 16;
 
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 16;
+    GlobalRenderer->Print("                                                                                     ");
 
-    newRenderer.Print("!! Memory map entry details !!");
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y += 32;
 
-    uint64_t mMapEntries = bootInfo->mMapSize / bootInfo->mMapDescSize;
+    GlobalRenderer->Colour = 0xff00ff00;
 
-    for (int i = 0; i < mMapEntries; i++)
-    {
-        EFI_MEMORY_DECSCRIPTOR *desc = (EFI_MEMORY_DECSCRIPTOR *)((uint64_t)bootInfo->mMap + (i * bootInfo->mMapDescSize));
+    GlobalRenderer->Print("Welcome to Alpha OS terminal");
 
-        newRenderer.CursorPosition.X = 24;
-        newRenderer.CursorPosition.Y += 32;
+    GlobalRenderer->Colour = 0xffffffff;
 
-        newRenderer.Print("TYPE: ");
-        newRenderer.Print(EFI_MEMORY_TYPE_STRINGS[desc->type]);
+    // asm ("int $0x0e");
 
-        newRenderer.Colour = 0xffff00ff;
-
-        newRenderer.Print(" SIZE: ");
-        newRenderer.Print(to_string(desc->numPages * 4096 / 1024));
-        newRenderer.Print(" KB");
-
-        newRenderer.Colour = 0xffffffff;
-    }
-
-    newRenderer.CursorPosition.X = 24;
-    newRenderer.CursorPosition.Y += 32;
-
-    PrintLine(&newRenderer, 2);
-
-    return;
+    while (true)
+        ;
 }
