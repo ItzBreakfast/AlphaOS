@@ -45,81 +45,75 @@ extern "C" void _start(BootInfo *bootInfo)
 
     PageTableManager *pageTableManager = KernelInfo.pageTableManager;
 
+    GlobalRenderer->Clear(0xff151515);
+
     GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y = 24;
+    GlobalRenderer->CursorPosition.Y = 16;
 
     PrintStatus(GlobalRenderer, true);
     GlobalRenderer->Print("All files loaded successfully");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     PrintStatus(GlobalRenderer, true);
     GlobalRenderer->Print("GOP located successfully");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     PrintStatus(GlobalRenderer, true);
     GlobalRenderer->Print("Renderer was set Successfully");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     PrintStatus(GlobalRenderer, true);
     GlobalRenderer->Print("Page tables was set successfully");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     PrintStatus(GlobalRenderer, true);
     GlobalRenderer->Print("Kernel initialized successfully");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 32;
+    GlobalRenderer->Next(2);
 
     GlobalRenderer->Print("     ___       __      .______    __    __       ___           ______        _______.");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     GlobalRenderer->Print("    /   \\     |  |     |   _  \\  |  |  |  |     /   \\         /  __  \\      /       |");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     GlobalRenderer->Print("   /  ^  \\    |  |     |  |_)  | |  |__|  |    /  ^  \\       |  |  |  |    |   (----`");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     GlobalRenderer->Print("  /  /_\\  \\   |  |     |   ___/  |   __   |   /  /_\\  \\      |  |  |  |     \\   \\    ");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     GlobalRenderer->Print(" /  _____  \\  |  `----.|  |      |  |  |  |  /  _____  \\     |  `--'  | .----)   |   ");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     GlobalRenderer->Print("/__/     \\__\\ |_______|| _|      |__|  |__| /__/     \\__\\     \\______/  |_______/    ");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 16;
+    GlobalRenderer->Next(1);
 
     GlobalRenderer->Print("                                                                                     ");
 
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y += 32;
+    GlobalRenderer->Next(2);
 
     GlobalRenderer->Colour = 0xff00ff00;
 
-    GlobalRenderer->Print("Welcome to Alpha OS terminal");
+    GlobalRenderer->Print("Welcome to Alpha OS terminal!");
 
     GlobalRenderer->Colour = 0xffffffff;
 
-    // asm ("int $0x0e");
+    GlobalRenderer->Next(2);
+
+    GlobalRenderer->Print("$ ");
+
+    // asm ("int $0x0e"); // Make page fault
 
     while (true)
         ;

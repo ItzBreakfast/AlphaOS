@@ -3,6 +3,7 @@
 #include "math.h"
 #include "Framebuffer.h"
 #include "simpleFonts.h"
+#include <stdint.h>
 
 class BasicRenderer
 {
@@ -16,6 +17,8 @@ public:
 
     void PutChar(char chr, unsigned int xOff, unsigned int yOff);
     void Print(const char *str);
+    void Clear(uint32_t colour);
+    void Next(int times);
 };
 
 extern BasicRenderer *GlobalRenderer;

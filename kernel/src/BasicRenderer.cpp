@@ -10,6 +10,33 @@ BasicRenderer::BasicRenderer(Framebuffer *targetFramebuffer, PSF1_FONT *psf1_Fon
     CursorPosition = {0, 0};
 }
 
+void BasicRenderer::Clear(uint32_t colour)
+{
+    uint64_t fbBase = (uint64_t)TargetFramebuffer->BaseAddress;
+    uint64_t fbSize = TargetFramebuffer->BufferSize;
+    uint64_t fbHeight = TargetFramebuffer->Height;
+    uint64_t bytesPerScanLine = TargetFramebuffer->PixelsPerScanLine * 4;
+
+    for (int verticalScanLine = 0; verticalScanLine < fbHeight; verticalScanLine++)
+    {
+        uint64_t pixPtrBase = fbBase + (bytesPerScanLine * verticalScanLine);
+
+        for (uint32_t *pixPtr = (uint32_t *)pixPtrBase; pixPtr < (uint32_t *)(pixPtrBase + bytesPerScanLine); pixPtr++)
+        {
+            *pixPtr = colour;
+        }
+    }
+}
+
+void BasicRenderer::Next(int times)
+{
+    for (int i = 0; i < times; i++)
+    {
+        CursorPosition.X = 16;
+        CursorPosition.Y += 16;
+    }
+}
+
 void BasicRenderer::PutChar(char chr, unsigned int xOff, unsigned int yOff)
 {
     unsigned int *pixPtr = (unsigned int *)TargetFramebuffer->BaseAddress;
