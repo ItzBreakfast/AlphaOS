@@ -11,6 +11,7 @@
 #include "paging/PageMapIndexer.h"
 #include "paging/PageTableManager.h"
 #include "paging/paging.h"
+#include "userinput/mouse.h"
 
 struct BootInfo
 {

@@ -1,6 +1,6 @@
 #include "interrupts.h"
 
-__attribute__((interrupt)) void PageFault_Handler(struct interrupt_frame *frame)
+__attribute__((interrupt)) void PageFault_Handler(interrupts_frame *frame)
 {
     Panic("Page fault");
 
@@ -8,7 +8,7 @@ __attribute__((interrupt)) void PageFault_Handler(struct interrupt_frame *frame)
         ;
 }
 
-__attribute__((interrupt)) void DoubleFault_Handler(struct interrupt_frame *frame)
+__attribute__((interrupt)) void DoubleFault_Handler(interrupts_frame *frame)
 {
     Panic("Double fault");
 
@@ -16,7 +16,7 @@ __attribute__((interrupt)) void DoubleFault_Handler(struct interrupt_frame *fram
         ;
 }
 
-__attribute__((interrupt)) void GPFault_Handler(struct interrupt_frame *frame)
+__attribute__((interrupt)) void GPFault_Handler(interrupts_frame *frame)
 {
     Panic("General Protection fault");
 
@@ -24,13 +24,22 @@ __attribute__((interrupt)) void GPFault_Handler(struct interrupt_frame *frame)
         ;
 }
 
-__attribute__((interrupt)) void KeyboardInt_Handler(struct interrupt_frame *frame)
+__attribute__((interrupt)) void KeyboardInt_Handler(interrupts_frame *frame)
 {
-    GlobalRenderer->Print("Pressed ");
-
     uint8_t scancode = inb(0x60);
 
+    HandleKeyboard(scancode);
+
     PIC_EndMaster();
+}
+
+__attribute__((interrupt)) void MouseInt_Handler(interrupts_frame *frame)
+{
+    uint8_t mouseData = inb(0x60);
+
+    GlobalRenderer->Print("m");
+
+    PIC_EndSlave();
 }
 
 void RemapPIC()

@@ -45,7 +45,9 @@ extern "C" void _start(BootInfo *bootInfo)
 
     PageTableManager *pageTableManager = KernelInfo.pageTableManager;
 
-    GlobalRenderer->Clear(0xff151515);
+    GlobalRenderer->ClearColour = 0xff151515;
+
+    GlobalRenderer->Clear();
 
     GlobalRenderer->CursorPosition.X = 16;
     GlobalRenderer->CursorPosition.Y = 16;

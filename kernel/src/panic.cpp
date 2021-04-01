@@ -2,7 +2,9 @@
 
 void Panic(const char *panicMessage)
 {
-    GlobalRenderer->Clear(0x3075ff);
+    GlobalRenderer->ClearColour = 0x3075ff;
+
+    GlobalRenderer->Clear();
 
     GlobalRenderer->CursorPosition.X = 16;
     GlobalRenderer->CursorPosition.Y = 16;
