@@ -37,7 +37,7 @@ __attribute__((interrupt)) void MouseInt_Handler(interrupts_frame *frame)
 {
     uint8_t mouseData = inb(0x60);
 
-    GlobalRenderer->Print("m");
+    HandlePS2Mouse(mouseData);
 
     PIC_EndSlave();
 }

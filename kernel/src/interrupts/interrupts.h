@@ -3,6 +3,7 @@
 #include "../panic.h"
 #include "../IO.h"
 #include "../userinput/keyboard.h"
+#include "../userinput/mouse.h"
 
 #define PIC1_COMMAND 0x20
 #define PIC1_DATA 0x21
