@@ -12,6 +12,8 @@
 #define PS2XOverflow 0b01000000
 #define PS2YOverflow 0b10000000
 
+extern uint8_t MousePointer[];
+
 extern Point MousePosition;
 
 void InitPS2Mouse();

@@ -73,6 +73,11 @@ extern "C" void _start(BootInfo *bootInfo)
     GlobalRenderer->Next(1);
 
     PrintStatus(GlobalRenderer, true);
+    GlobalRenderer->Print("Interrupts was set successfully");
+
+    GlobalRenderer->Next(1);
+
+    PrintStatus(GlobalRenderer, true);
     GlobalRenderer->Print("Kernel initialized successfully");
 
     GlobalRenderer->Next(2);
@@ -117,7 +122,7 @@ extern "C" void _start(BootInfo *bootInfo)
 
     // asm ("int $0x0e"); // Make page fault
 
-    while(true) 
+    while (true)
     {
         ProcessMousePacket();
     }
