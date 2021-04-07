@@ -1,11 +1,6 @@
 #include "kernelUtil.h"
-#include "gdt/gdt.h"
-#include "IO.h"
-#include "interrupts/IDT.h"
-#include "interrupts/interrupts.h"
 
 KernelInfo kernelInfo;
-PageTableManager pageTableManager = NULL;
 
 void PrepareMemory(BootInfo *bootInfo)
 {
@@ -28,11 +23,11 @@ void PrepareMemory(BootInfo *bootInfo)
 
     memset(PML4, 0, 0x1000);
 
-    pageTableManager = PageTableManager(PML4);
+    g_PageTableManager = PageTableManager(PML4);
 
     for (uint64_t i = 0; i < GetMemorySize(bootInfo->mMap, mMapEntries, bootInfo->mMapDescSize); i += 0x1000)
     {
-        pageTableManager.MapMemory((void *)i, (void *)i);
+        g_PageTableManager.MapMemory((void *)i, (void *)i);
     }
 
     uint64_t fbBase = (uint64_t)bootInfo->framebuffer->BaseAddress;
@@ -42,14 +37,14 @@ void PrepareMemory(BootInfo *bootInfo)
 
     for (uint64_t i = fbBase; i < fbBase + fbSize; i += 0x1000)
     {
-        pageTableManager.MapMemory((void *)i, (void *)i);
+        g_PageTableManager.MapMemory((void *)i, (void *)i);
     }
 
     asm("mov %0, %%cr3"
         :
         : "r"(PML4));
 
-    kernelInfo.pageTableManager = &pageTableManager;
+    kernelInfo.pageTableManager = &g_PageTableManager;
 
     return;
 }
@@ -87,6 +82,34 @@ void PrepareInterrupts()
     return;
 }
 
+void PrepareACPI(BootInfo *bootInfo)
+{
+    ACPI::SDTHeader *xsdt = (ACPI::SDTHeader *)(bootInfo->rsdp->XSDTAddress);
+    ACPI::MCFGHeader *mcfg = (ACPI::MCFGHeader *)ACPI::FindTable(xsdt, (char *)"MCFG");
+
+    GlobalRenderer->Print("Address: ");
+    GlobalRenderer->Print(to_hstring((uint64_t)mcfg));
+
+    GlobalRenderer->Next(2);
+
+    for (int t = 0; t < 4; t++)
+    {
+        GlobalRenderer->Print(to_hstring((uint64_t)mcfg->Header.Signature[t]));
+        GlobalRenderer->PutChar(' ');
+        GlobalRenderer->PutChar(mcfg->Header.Signature[t]);
+
+        GlobalRenderer->Next(1);
+    }
+
+    GlobalRenderer->Next(1);
+
+    PCI::EnumratePCI(mcfg);
+
+    GlobalRenderer->Next(1);
+
+    return;
+}
+
 BasicRenderer renderer = BasicRenderer(NULL, NULL);
 
 KernelInfo InitializeKernel(BootInfo *bootInfo)
@@ -94,6 +117,13 @@ KernelInfo InitializeKernel(BootInfo *bootInfo)
     renderer = BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
 
     GlobalRenderer = &renderer;
+
+    GlobalRenderer->ClearColour = 0xff151515;
+
+    GlobalRenderer->Clear();
+
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y = 16;
 
     GDTDescriptor gdtDescriptor;
 
@@ -109,6 +139,8 @@ KernelInfo InitializeKernel(BootInfo *bootInfo)
     PrepareInterrupts();
 
     InitPS2Mouse();
+
+    PrepareACPI(bootInfo);
 
     outb(PIC1_DATA, 0b11111001);
     outb(PIC2_DATA, 0b11101111);

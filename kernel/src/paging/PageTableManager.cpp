@@ -1,9 +1,6 @@
-#include <stdint.h>
-
 #include "PageTableManager.h"
-#include "PageMapIndexer.h"
-#include "PageFrameAllocator.h"
-#include "../memory.h"
+
+PageTableManager g_PageTableManager = NULL;
 
 PageTableManager::PageTableManager(PageTable *PML4Address)
 {

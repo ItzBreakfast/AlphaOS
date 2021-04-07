@@ -1,6 +1,11 @@
 #pragma once
 
+#include <stdint.h>
+
 #include "paging.h"
+#include "PageMapIndexer.h"
+#include "PageFrameAllocator.h"
+#include "../memory.h"
 
 class PageTableManager
 {
@@ -11,3 +16,5 @@ public:
 
     void MapMemory(void *virtualMemory, void *physicalMemory);
 };
+
+extern PageTableManager g_PageTableManager;
