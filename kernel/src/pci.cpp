@@ -16,9 +16,22 @@ namespace PCI
         if (pciDeviceHeader->DeviceID == 0xFFFF)
             return;
 
-        GlobalRenderer->Print(to_hstring(pciDeviceHeader->VendorID));
-        GlobalRenderer->Print(" ");
-        GlobalRenderer->Print(to_hstring(pciDeviceHeader->DeviceID));
+        GlobalRenderer->Print("PCI Device: ");
+
+        GlobalRenderer->Print(GetVendorName(pciDeviceHeader->VendorID));
+        GlobalRenderer->Print(" | ");
+
+        GlobalRenderer->Print(GetDeviceName(pciDeviceHeader->VendorID, pciDeviceHeader->DeviceID));
+        GlobalRenderer->Print(" | ");
+
+        GlobalRenderer->Print(PCI::DeviceClasses[pciDeviceHeader->Class]);
+        GlobalRenderer->Print(" | ");
+
+        GlobalRenderer->Print(GetSubclassName(pciDeviceHeader->Class, pciDeviceHeader->Subclass));
+        GlobalRenderer->Print(" | ");
+
+        GlobalRenderer->Print(GetProgIFName(pciDeviceHeader->Class, pciDeviceHeader->Subclass, pciDeviceHeader->ProgIF));
+
         GlobalRenderer->Next(1);
 
         return;

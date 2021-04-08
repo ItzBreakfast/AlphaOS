@@ -92,17 +92,6 @@ void PrepareACPI(BootInfo *bootInfo)
 
     GlobalRenderer->Next(2);
 
-    for (int t = 0; t < 4; t++)
-    {
-        GlobalRenderer->Print(to_hstring((uint64_t)mcfg->Header.Signature[t]));
-        GlobalRenderer->PutChar(' ');
-        GlobalRenderer->PutChar(mcfg->Header.Signature[t]);
-
-        GlobalRenderer->Next(1);
-    }
-
-    GlobalRenderer->Next(1);
-
     PCI::EnumratePCI(mcfg);
 
     GlobalRenderer->Next(1);
@@ -118,13 +107,6 @@ KernelInfo InitializeKernel(BootInfo *bootInfo)
 
     GlobalRenderer = &renderer;
 
-    GlobalRenderer->ClearColour = 0xff151515;
-
-    GlobalRenderer->Clear();
-
-    GlobalRenderer->CursorPosition.X = 16;
-    GlobalRenderer->CursorPosition.Y = 16;
-
     GDTDescriptor gdtDescriptor;
 
     gdtDescriptor.Size = sizeof(GDT) - 1;
@@ -135,6 +117,13 @@ KernelInfo InitializeKernel(BootInfo *bootInfo)
     PrepareMemory(bootInfo);
 
     memset(bootInfo->framebuffer->BaseAddress, 0, bootInfo->framebuffer->BufferSize);
+
+    GlobalRenderer->ClearColour = 0xff151515;
+
+    GlobalRenderer->Clear();
+
+    GlobalRenderer->CursorPosition.X = 16;
+    GlobalRenderer->CursorPosition.Y = 16;
 
     PrepareInterrupts();
 
