@@ -71,13 +71,20 @@ Point MousePositionOld;
 
 void HandlePS2Mouse(uint8_t data)
 {
+    ProcessMousePacket();
+
+    static bool skip = true;
+
+    if (skip)
+    {
+        skip = false;
+        return;
+    }
+
     switch (MouseCycle)
     {
     case 0:
     {
-        if (MousePacketReady)
-            break;
-
         if (data & 0b00001000 == 0)
             break;
 
@@ -89,9 +96,6 @@ void HandlePS2Mouse(uint8_t data)
 
     case 1:
     {
-        if (MousePacketReady)
-            break;
-
         MousePacket[1] = data;
         MouseCycle++;
 
@@ -100,9 +104,6 @@ void HandlePS2Mouse(uint8_t data)
 
     case 2:
     {
-        if (MousePacketReady)
-            break;
-
         MousePacket[2] = data;
         MousePacketReady = true;
         MouseCycle = 0;
@@ -198,29 +199,14 @@ void ProcessMousePacket()
 
     if (MousePacket[0] & PS2Leftbutton)
     {
-        uint32_t colour = GlobalRenderer->Colour;
-
-        GlobalRenderer->Colour = 0xffff0000;
-        GlobalRenderer->PutChar('L', MousePosition.X, MousePosition.Y);
-        GlobalRenderer->Colour = colour;
     }
 
     if (MousePacket[0] & PS2Middlebutton)
     {
-        uint32_t colour = GlobalRenderer->Colour;
-
-        GlobalRenderer->Colour = 0xffededed;
-        GlobalRenderer->PutChar('M', MousePosition.X, MousePosition.Y);
-        GlobalRenderer->Colour = colour;
     }
 
     if (MousePacket[0] & PS2Rightbutton)
     {
-        uint32_t colour = GlobalRenderer->Colour;
-
-        GlobalRenderer->Colour = 0xff00ff00;
-        GlobalRenderer->PutChar('R', MousePosition.X, MousePosition.Y);
-        GlobalRenderer->Colour = colour;
     }
 
     MousePacketReady = false;

@@ -2,6 +2,7 @@
 
 void Panic(const char *panicMessage)
 {
+    GlobalRenderer->Colour = 0xffffffff;
     GlobalRenderer->ClearColour = 0x3075ff;
 
     GlobalRenderer->Clear();
