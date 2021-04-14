@@ -18,6 +18,7 @@
 #include "gdt/gdt.h"
 #include "interrupts/IDT.h"
 #include "interrupts/interrupts.h"
+#include "memory/heap.h"
 
 struct BootInfo
 {

@@ -1,8 +1,8 @@
 #include "kernelUtil.h"
 
-void PrintStatus(BasicRenderer *GlobalRenderer, bool isSuccess);
-void PrintLogo(BasicRenderer *GlobalRenderer);
-void PrintDesc(BasicRenderer *GlobalRenderer);
+void PrintStatus(bool isSuccess);
+void PrintLogo();
+void PrintDesc();
 
 extern "C" void _start(BootInfo *bootInfo)
 {
@@ -17,43 +17,43 @@ extern "C" void _start(BootInfo *bootInfo)
     // GlobalRenderer->CursorPosition.X = 16;
     // GlobalRenderer->CursorPosition.Y = 16;
 
-    PrintStatus(GlobalRenderer, true);
+    PrintStatus(true);
     GlobalRenderer->Print("All files loaded successfully");
 
     GlobalRenderer->Next(1);
 
-    PrintStatus(GlobalRenderer, true);
+    PrintStatus(true);
     GlobalRenderer->Print("GOP located successfully");
 
     GlobalRenderer->Next(1);
 
-    PrintStatus(GlobalRenderer, true);
+    PrintStatus(true);
     GlobalRenderer->Print("Renderer was set Successfully");
 
     GlobalRenderer->Next(1);
 
-    PrintStatus(GlobalRenderer, true);
+    PrintStatus(true);
     GlobalRenderer->Print("Page tables was set successfully");
 
     GlobalRenderer->Next(1);
 
-    PrintStatus(GlobalRenderer, true);
+    PrintStatus(true);
     GlobalRenderer->Print("Interrupts was set successfully");
 
     GlobalRenderer->Next(1);
 
-    PrintStatus(GlobalRenderer, true);
+    PrintStatus(true);
     GlobalRenderer->Print("RSDP was set successfully");
 
     GlobalRenderer->Next(1);
 
-    PrintDesc(GlobalRenderer);
+    PrintDesc();
     GlobalRenderer->Print("Address: 0x");
     GlobalRenderer->Print(to_hstring((uint64_t)bootInfo->rsdp));
 
     GlobalRenderer->Next(1);
 
-    PrintDesc(GlobalRenderer);
+    PrintDesc();
     GlobalRenderer->Print("Vendor Table: ");
     GlobalRenderer->PutChar(*(uint8_t *)bootInfo->rsdp);
     GlobalRenderer->PutChar(*((uint8_t *)bootInfo->rsdp + 1));
@@ -66,12 +66,17 @@ extern "C" void _start(BootInfo *bootInfo)
 
     GlobalRenderer->Next(2);
 
-    PrintStatus(GlobalRenderer, true);
+    PrintStatus(true);
+    GlobalRenderer->Print("Heap was set successfully");
+
+    GlobalRenderer->Next(1);
+
+    PrintStatus(true);
     GlobalRenderer->Print("Kernel initialized successfully");
 
     GlobalRenderer->Next(2);
 
-    PrintLogo(GlobalRenderer);
+    PrintLogo();
 
     GlobalRenderer->Next(2);
 
@@ -91,7 +96,7 @@ extern "C" void _start(BootInfo *bootInfo)
         ;
 }
 
-void PrintStatus(BasicRenderer *GlobalRenderer, bool isSuccess)
+void PrintStatus(bool isSuccess)
 {
     switch (isSuccess)
     {
@@ -132,7 +137,7 @@ void PrintStatus(BasicRenderer *GlobalRenderer, bool isSuccess)
     return;
 }
 
-void PrintLogo(BasicRenderer *GlobalRenderer)
+void PrintLogo()
 {
     GlobalRenderer->Print("     ___       __      .______    __    __       ___           ______        _______.");
 
@@ -163,7 +168,7 @@ void PrintLogo(BasicRenderer *GlobalRenderer)
     return;
 }
 
-void PrintDesc(BasicRenderer *GlobalRenderer)
+void PrintDesc()
 {
     GlobalRenderer->Print("             -   ");
 

@@ -85,7 +85,7 @@ void HandlePS2Mouse(uint8_t data)
     {
     case 0:
     {
-        if (data & 0b00001000 == 0)
+        if ((data & 0b00001000) == 0)
             break;
 
         MousePacket[0] = data;
