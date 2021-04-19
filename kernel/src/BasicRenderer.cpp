@@ -79,7 +79,7 @@ void BasicRenderer::Next(int times)
     return;
 }
 
-void BasicRenderer::PutChar(char chr, unsigned int xOff, unsigned int yOff)
+void BasicRenderer::PutChar(char chr, long xOff, long yOff)
 {
     unsigned int *pixPtr = (unsigned int *)TargetFramebuffer->BaseAddress;
 

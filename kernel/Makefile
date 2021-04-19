@@ -1,5 +1,5 @@
 
-OSNAME = CustomOS
+OSNAME = AlphaOS
 
 GNUEFI = ../gnu-efi
 OVMFDIR = ../OVMFbin

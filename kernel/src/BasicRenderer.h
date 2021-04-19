@@ -21,7 +21,7 @@ public:
     BasicRenderer(Framebuffer *TargetFramebuffer, PSF1_FONT *psf1_Font);
 
     void PutPix(uint32_t x, uint32_t y, uint32_t colour);
-    void PutChar(char chr, unsigned int xOff, unsigned int yOff);
+    void PutChar(char chr, long xOff, long yOff);
     void PutChar(char chr);
     void Print(const char *str);
     void Clear();
