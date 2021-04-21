@@ -1,10 +1,11 @@
 #include "pci.h"
+#include "ahci/ahci.h" // For prevent infinite reference error
 
 namespace PCI
 {
     void EnumrateFunction(uint64_t deviceAddress, uint64_t function)
     {
-        uint64_t offset = function << 15;
+        uint64_t offset = function << 12;
         uint64_t functionAddress = deviceAddress + offset;
 
         g_PageTableManager.MapMemory((void *)functionAddress, (void *)functionAddress);
@@ -16,23 +17,43 @@ namespace PCI
         if (pciDeviceHeader->DeviceID == 0xFFFF)
             return;
 
-        GlobalRenderer->Print("PCI Device: ");
+        // GlobalRenderer->Print("PCI Device: ");
 
-        GlobalRenderer->Print(GetVendorName(pciDeviceHeader->VendorID));
-        GlobalRenderer->Print(" | ");
+        // GlobalRenderer->Print(GetVendorName(pciDeviceHeader->VendorID));
+        // GlobalRenderer->Print(" | ");
 
-        GlobalRenderer->Print(GetDeviceName(pciDeviceHeader->VendorID, pciDeviceHeader->DeviceID));
-        GlobalRenderer->Print(" | ");
+        // GlobalRenderer->Print(GetDeviceName(pciDeviceHeader->VendorID, pciDeviceHeader->DeviceID));
+        // GlobalRenderer->Print(" | ");
 
-        GlobalRenderer->Print(PCI::DeviceClasses[pciDeviceHeader->Class]);
-        GlobalRenderer->Print(" | ");
+        // GlobalRenderer->Print(PCI::DeviceClasses[pciDeviceHeader->Class]);
+        // GlobalRenderer->Print(" | ");
 
-        GlobalRenderer->Print(GetSubclassName(pciDeviceHeader->Class, pciDeviceHeader->Subclass));
-        GlobalRenderer->Print(" | ");
+        // GlobalRenderer->Print(GetSubclassName(pciDeviceHeader->Class, pciDeviceHeader->Subclass));
+        // GlobalRenderer->Print(" | ");
 
-        GlobalRenderer->Print(GetProgIFName(pciDeviceHeader->Class, pciDeviceHeader->Subclass, pciDeviceHeader->ProgIF));
+        // GlobalRenderer->Print(GetProgIFName(pciDeviceHeader->Class, pciDeviceHeader->Subclass, pciDeviceHeader->ProgIF));
 
-        GlobalRenderer->Next(1);
+        // GlobalRenderer->Next(1);
+
+        switch (pciDeviceHeader->Class)
+        {
+        case 0x01:
+        {
+            switch (pciDeviceHeader->Subclass)
+            {
+            case 0x06:
+            {
+                switch (pciDeviceHeader->ProgIF)
+                {
+                case 0x01:
+                {
+                    new AHCI::AHCIDriver(pciDeviceHeader);
+                }
+                }
+            }
+            }
+        }
+        }
 
         return;
     }
@@ -61,7 +82,6 @@ namespace PCI
 
     void EnumrateBus(uint64_t baseAddress, uint64_t bus)
     {
-
         uint64_t offset = bus << 20;
         uint64_t busAddress = baseAddress + offset;
 

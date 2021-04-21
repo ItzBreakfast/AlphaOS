@@ -32,4 +32,8 @@ public:
     uint32_t GetPix(uint32_t x, uint32_t y);
 };
 
+void PrintDesc();
+void PrintLogo(long xOff, long yOff);
+void PrintStatus(bool isSuccess);
+
 extern BasicRenderer *GlobalRenderer;

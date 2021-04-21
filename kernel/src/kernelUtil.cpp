@@ -90,8 +90,6 @@ void PrepareACPI(BootInfo *bootInfo)
 
     PCI::EnumratePCI(mcfg);
 
-    GlobalRenderer->Next(1);
-
     return;
 }
 

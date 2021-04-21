@@ -221,3 +221,91 @@ void BasicRenderer::DrawOverlayMouseCursor(uint8_t *mouseCursor, Point position,
 
     MouseDrawn = true;
 }
+
+void PrintStatus(bool isSuccess)
+{
+    switch (isSuccess)
+    {
+    case true:
+    {
+        GlobalRenderer->Colour = 0xffffffff;
+
+        GlobalRenderer->Print("[");
+
+        GlobalRenderer->Colour = 0xff00ff00;
+        GlobalRenderer->Print("   OK   ");
+
+        GlobalRenderer->Colour = 0xffffffff;
+
+        GlobalRenderer->Print("]   ");
+
+        break;
+    }
+
+    case false:
+    {
+        GlobalRenderer->Colour = 0xffffffff;
+
+        GlobalRenderer->Print("[");
+
+        GlobalRenderer->Colour = 0xff00ff00;
+
+        GlobalRenderer->Print("  ERROR  ");
+
+        GlobalRenderer->Colour = 0xffffffff;
+
+        GlobalRenderer->Print("]   ");
+
+        break;
+    }
+    }
+
+    return;
+}
+
+void PrintLogo(long xOff, long yOff)
+{
+    uint32_t originColour = GlobalRenderer->Colour;
+    GlobalRenderer->Colour = 0xfe433c;
+
+    GlobalRenderer->CursorPosition.X = xOff;
+    GlobalRenderer->CursorPosition.Y = yOff;
+
+    GlobalRenderer->Print("  dBBBBBb     dBP  dBBBBBb  dBP dBP dBBBBBb        dBBBBP.dBBBBP");
+
+    GlobalRenderer->Next(1);
+    GlobalRenderer->CursorPosition.X = xOff;
+
+    GlobalRenderer->Print("       BB              dB'               BB       dB'.BP BP     ");
+
+    GlobalRenderer->Next(1);
+    GlobalRenderer->CursorPosition.X = xOff;
+
+    GlobalRenderer->Print("   dBP BB   dBP    dBBBP' dBBBBBP    dBP BB      dB'.BP  `BBBBb ");
+
+    GlobalRenderer->Next(1);
+    GlobalRenderer->CursorPosition.X = xOff;
+
+    GlobalRenderer->Print("  dBP  BB  dBP    dBP    dBP dBP    dBP  BB     dB'.BP      dBP ");
+
+    GlobalRenderer->Next(1);
+    GlobalRenderer->CursorPosition.X = xOff;
+
+    GlobalRenderer->Print(" dBBBBBBB dBBBBP dBP    dBP dBP    dBBBBBBB    dBBBBP  dBBBBP'  ");
+
+    GlobalRenderer->Next(1);
+    GlobalRenderer->CursorPosition.X = xOff;
+
+    GlobalRenderer->Print("                                                                ");
+
+    GlobalRenderer->Colour = originColour;
+
+    return;
+}
+
+void PrintDesc()
+{
+    GlobalRenderer->Print("             -   ");
+
+    return;
+}

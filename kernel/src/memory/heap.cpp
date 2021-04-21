@@ -1,6 +1,4 @@
 #include "heap.h"
-#include "../paging/PageTableManager.h"
-#include "../paging/PageFrameAllocator.h"
 
 void *heapStart;
 void *heapEnd;
@@ -130,6 +128,8 @@ void HeapSegHdr::CombineForward()
     {
         next->next->last = this;
     }
+
+    next = next->next;
 
     length = length + next->length + sizeof(HeapSegHdr);
 

@@ -1,8 +1,5 @@
 #include "kernelUtil.h"
 
-void PrintDesc();
-void PrintLogo(long xOff, long yOff);
-void PrintStatus(bool isSuccess);
 void BootingTimeTest(long xOff, long yOff);
 
 extern "C" void _start(BootInfo *bootInfo)
@@ -33,22 +30,22 @@ extern "C" void _start(BootInfo *bootInfo)
     GlobalRenderer->Next(1);
 
     PrintStatus(true);
-    GlobalRenderer->Print("Renderer was set Successfully");
+    GlobalRenderer->Print("Renderer set Successfully");
 
     GlobalRenderer->Next(1);
 
     PrintStatus(true);
-    GlobalRenderer->Print("Page tables was set successfully");
+    GlobalRenderer->Print("Page tables set successfully");
 
     GlobalRenderer->Next(1);
 
     PrintStatus(true);
-    GlobalRenderer->Print("Interrupts was set successfully");
+    GlobalRenderer->Print("Interrupts set successfully");
 
     GlobalRenderer->Next(1);
 
     PrintStatus(true);
-    GlobalRenderer->Print("RSDP was set successfully");
+    GlobalRenderer->Print("RSDP set successfully");
 
     GlobalRenderer->Next(1);
 
@@ -72,26 +69,30 @@ extern "C" void _start(BootInfo *bootInfo)
     // GlobalRenderer->Next(2);
 
     PrintStatus(true);
-    GlobalRenderer->Print("Heap was set successfully");
+    GlobalRenderer->Print("Heap set successfully");
 
     GlobalRenderer->Next(1);
 
     PrintStatus(true);
-    GlobalRenderer->Print("Timer was set successfully");
+    GlobalRenderer->Print("Timer set successfully");
 
     GlobalRenderer->Next(1);
 
     PrintStatus(true);
     GlobalRenderer->Print("Kernel initialized successfully");
 
-    PIT::Sleep(1000);
+    GlobalRenderer->Next(2);
+
+    GlobalRenderer->Print("Successfully set everything");
+
+    PIT::Sleep(2500);
 
     /* =----------= < PRINT LOADING SCREEN WITH LOGO > =----------= */
 
     GlobalRenderer->ClearColour = 0xff151515;
     GlobalRenderer->Clear();
 
-    PrintLogo(GlobalRenderer->TargetFramebuffer->Width / 2 - 352, GlobalRenderer->TargetFramebuffer->Height / 2 - 112);
+    PrintLogo(GlobalRenderer->TargetFramebuffer->Width / 2 - 272, GlobalRenderer->TargetFramebuffer->Height / 2 - 112);
 
     uint32_t originColour = GlobalRenderer->Colour;
     GlobalRenderer->Colour = 0xffcccccc;
@@ -102,7 +103,7 @@ extern "C" void _start(BootInfo *bootInfo)
 
     GlobalRenderer->Colour = originColour;
 
-    BootingTimeTest(GlobalRenderer->TargetFramebuffer->Width / 2 - 352, GlobalRenderer->TargetFramebuffer->Height / 2 + 80);
+    BootingTimeTest(GlobalRenderer->TargetFramebuffer->Width / 2 - 128, GlobalRenderer->TargetFramebuffer->Height / 2 + 96);
 
     GlobalRenderer->Clear();
 
@@ -129,7 +130,7 @@ extern "C" void _start(BootInfo *bootInfo)
 
     GlobalRenderer->Print("Anyways, enjoy the AlphaOS.");
 
-    GlobalRenderer->Next(2);
+    GlobalRenderer->Next(3);
 
     PrintLogo(GlobalRenderer->CursorPosition.X, GlobalRenderer->CursorPosition.Y);
 
@@ -148,116 +149,30 @@ extern "C" void _start(BootInfo *bootInfo)
     // asm ("int $0x0e"); // Make page fault
 
     while (true)
-        ;
+    {
+        asm("hlt");
+    }
 }
 
 void BootingTimeTest(long xOff, long yOff)
 {
+    uint32_t originColour = GlobalRenderer->Colour;
     GlobalRenderer->Colour = 0xffffffff;
+
     GlobalRenderer->CursorPosition = {xOff, yOff};
 
-    GlobalRenderer->Print("Loading.. [ ");
+    // GlobalRenderer->Print("| ");
 
-    GlobalRenderer->PutChar(']', xOff + (8 * 84), yOff);
+    // GlobalRenderer->PutChar('|', xOff + (8 * 54), yOff);
 
-    GlobalRenderer->Colour = 0xff00ff00;
-
-    for (int t = 0; t < 70; t++)
+    for (int t = 0; t < 10; t++)
     {
-        GlobalRenderer->Print("|");
+        GlobalRenderer->Print("■");
 
-        PIT::Sleep(100);
+        PIT::Sleep(250);
     }
 
-    GlobalRenderer->Colour = 0xffffffff;
-
-    return;
-}
-
-void PrintStatus(bool isSuccess)
-{
-    switch (isSuccess)
-    {
-    case true:
-    {
-        GlobalRenderer->Colour = 0xffffffff;
-
-        GlobalRenderer->Print("[");
-
-        GlobalRenderer->Colour = 0xff00ff00;
-        GlobalRenderer->Print("   OK   ");
-
-        GlobalRenderer->Colour = 0xffffffff;
-
-        GlobalRenderer->Print("]   ");
-
-        break;
-    }
-
-    case false:
-    {
-        GlobalRenderer->Colour = 0xffffffff;
-
-        GlobalRenderer->Print("[");
-
-        GlobalRenderer->Colour = 0xff00ff00;
-
-        GlobalRenderer->Print("  ERROR  ");
-
-        GlobalRenderer->Colour = 0xffffffff;
-
-        GlobalRenderer->Print("]   ");
-
-        break;
-    }
-    }
-
-    return;
-}
-
-void PrintLogo(long xOff, long yOff)
-{
-    GlobalRenderer->CursorPosition.X = xOff;
-    GlobalRenderer->CursorPosition.Y = yOff;
-
-    GlobalRenderer->Print("     ___       __      .______    __    __       ___           ______        _______.");
-
-    GlobalRenderer->Next(1);
-    GlobalRenderer->CursorPosition.X = xOff;
-
-    GlobalRenderer->Print("    /   \\     |  |     |   _  \\  |  |  |  |     /   \\         /  __  \\      /       |");
-
-    GlobalRenderer->Next(1);
-    GlobalRenderer->CursorPosition.X = xOff;
-
-    GlobalRenderer->Print("   /  ^  \\    |  |     |  |_)  | |  |__|  |    /  ^  \\       |  |  |  |    |   (----`");
-
-    GlobalRenderer->Next(1);
-    GlobalRenderer->CursorPosition.X = xOff;
-
-    GlobalRenderer->Print("  /  /_\\  \\   |  |     |   ___/  |   __   |   /  /_\\  \\      |  |  |  |     \\   \\    ");
-
-    GlobalRenderer->Next(1);
-    GlobalRenderer->CursorPosition.X = xOff;
-
-    GlobalRenderer->Print(" /  _____  \\  |  `----.|  |      |  |  |  |  /  _____  \\     |  `--'  | .----)   |   ");
-
-    GlobalRenderer->Next(1);
-    GlobalRenderer->CursorPosition.X = xOff;
-
-    GlobalRenderer->Print("/__/     \\__\\ |_______|| _|      |__|  |__| /__/     \\__\\     \\______/  |_______/    ");
-
-    GlobalRenderer->Next(1);
-    GlobalRenderer->CursorPosition.X = xOff;
-
-    GlobalRenderer->Print("                                                                                     ");
-
-    return;
-}
-
-void PrintDesc()
-{
-    GlobalRenderer->Print("             -   ");
+    GlobalRenderer->Colour = originColour;
 
     return;
 }
