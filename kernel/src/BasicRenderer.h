@@ -35,5 +35,6 @@ public:
 void PrintDesc();
 void PrintLogo(long xOff, long yOff);
 void PrintStatus(bool isSuccess);
+void TermClearChar(long xOff);
 
 extern BasicRenderer *GlobalRenderer;

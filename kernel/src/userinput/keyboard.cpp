@@ -3,6 +3,9 @@
 bool isLeftShiftPressed;
 bool isRightShiftPressed;
 
+bool TermMode = true;
+long BaseLineX = 8 * 3;
+
 void HandleKeyboard(uint8_t scancode)
 {
     switch (scancode)
@@ -37,7 +40,24 @@ void HandleKeyboard(uint8_t scancode)
 
     case Enter:
     {
-        GlobalRenderer->Next(1);
+        if (TermMode)
+        {
+            uint32_t originColour = GlobalRenderer->Colour;
+            GlobalRenderer->Colour = 0xffcccccc;
+
+            GlobalRenderer->Next(1);
+            GlobalRenderer->Print("Shell: This is not valid command in this shell");
+            GlobalRenderer->Next(2);
+
+            GlobalRenderer->Colour = originColour;
+
+            BaseLineX = 8 * 3;
+            GlobalRenderer->Print("$ ");
+        }
+        else
+        {
+            GlobalRenderer->Next(1);
+        }
 
         return;
     }
@@ -51,7 +71,8 @@ void HandleKeyboard(uint8_t scancode)
 
     case BackSpace:
     {
-        GlobalRenderer->ClearChar();
+        if (GlobalRenderer->CursorPosition.X - 8 > BaseLineX)
+            GlobalRenderer->ClearChar();
 
         return;
     }

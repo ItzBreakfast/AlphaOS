@@ -26,6 +26,29 @@ namespace PCI
         uint8_t BIST;
     };
 
+    struct PCIHeader0
+    {
+        PCIDeviceHeader Header;
+        uint32_t BAR0;
+        uint32_t BAR1;
+        uint32_t BAR2;
+        uint32_t BAR3;
+        uint32_t BAR4;
+        uint32_t BAR5;
+        uint32_t CarbusCISPtr;
+        uint16_t SubsystemVendorID;
+        uint16_t SubsystemID;
+        uint32_t ExpansionROMBaseAddr;
+        uint8_t CapablitiesPtr;
+        uint8_t Rsv0;
+        uint16_t Rsv1;
+        uint32_t Rsv2;
+        uint8_t InterruptLine;
+        uint8_t InterruptPin;
+        uint8_t MinGrant;
+        uint8_t MaxLatency;
+    };
+
     void EnumratePCI(ACPI::MCFGHeader *mcfg);
     const char *GetVendorName(uint16_t vendorID);
     const char *GetDeviceName(uint16_t vendorID, uint16_t deviceID);
