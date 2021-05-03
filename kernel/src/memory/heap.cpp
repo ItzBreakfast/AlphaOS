@@ -149,14 +149,15 @@ HeapSegHdr *HeapSegHdr::Split(size_t splitLength)
     if (splitLength < 0x10)
         return NULL;
 
-    size_t splitSegLength = length - splitLength - (sizeof(HeapSegHdr));
+    int64_t splitSegLength = length - splitLength - (sizeof(HeapSegHdr));
 
     if (splitSegLength < 0x10)
         return NULL;
 
     HeapSegHdr *newSplitHdr = (HeapSegHdr *)((size_t)this + splitLength + sizeof(HeapSegHdr));
 
-    next->last = newSplitHdr;
+    if (next != NULL)
+        next->last = newSplitHdr;
 
     newSplitHdr->next = next;
 

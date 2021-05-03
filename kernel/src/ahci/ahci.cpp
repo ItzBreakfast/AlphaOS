@@ -4,6 +4,7 @@ namespace AHCI
 {
     AHCIDriver::AHCIDriver(PCI::PCIDeviceHeader *pciBaseAddress)
     {
+        this->portCount = 0;
         this->PCIBaseAddress = pciBaseAddress;
 
         PrintStatus(true);

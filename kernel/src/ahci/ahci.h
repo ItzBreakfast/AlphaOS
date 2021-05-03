@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "../pci.h"
+#include "../BasicRenderer.h"
 #include "../paging/PageTableManager.h"
 #include "../paging/PageFrameAllocator.h"
 #include "../memory/heap.h"
